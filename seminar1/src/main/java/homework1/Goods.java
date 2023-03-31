@@ -2,12 +2,21 @@ package homework1;
 
 public class Goods {
     String name;
-    Double price;
+    double price;
     double rating;
+    double amount;
 
-    public Goods(String name, Double price) {
+    /**
+     * Товар
+     *
+     * @param name   наименование
+     * @param price  цена
+     * @param amount количество
+     */
+    public Goods(String name, double price, double amount) {
         this.name = name;
         this.price = price;
+        this.amount = amount;
     }
 
     public Goods() {
@@ -15,6 +24,24 @@ public class Goods {
 
     @Override
     public String toString() {
-        return name + " price = " + price + ", rating = " + rating;
+        return name +
+                ": цена = " + price +
+                ", рейтинг = " + rating +
+                ", количество = " + amount;
+    }
+
+    /**
+     * Проверяет наличие требуемого количества товара к покупке
+     * @param amt запрашиваемое количество
+     * @return возможное количество
+     */
+    public double decrease(double amt) {
+        if (amt <= this.amount)
+            this.amount -= amt;
+        else {
+            amt = this.amount;
+            this.amount = 0;
+        }
+        return amt;
     }
 }

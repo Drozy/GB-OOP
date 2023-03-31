@@ -1,24 +1,29 @@
 package homework1;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 
 public class Category {
     String name;
-    Goods[] goods;
+    ArrayList<Goods> goods;
 
     public Category() {
     }
 
-    public Category(String name, Goods[] goods) {
+    /**
+     * Категория товаров
+     * @param name наименование
+     * @param goods перечень товаров
+     */
+    public Category(String name, ArrayList<Goods> goods) {
         this.name = name;
         this.goods = goods;
     }
 
     @Override
     public String toString() {
-        return "Category{" +
-                "name='" + name + '\'' +
-                ", goods=" + Arrays.toString(goods) +
-                '}';
+        StringBuilder str = new StringBuilder();
+        str.append("\n").append(name).append(":");
+        goods.forEach((g) -> str.append("\n").append(g));
+        return str.toString();
     }
 }
