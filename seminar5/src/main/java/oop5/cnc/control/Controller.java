@@ -2,8 +2,6 @@ package oop5.cnc.control;
 
 import oop5.cnc.model.ComplexNumber;
 import oop5.cnc.model.OperationFactory;
-import oop5.cnc.model.CalcOperator;
-import oop5.cnc.model.operations.Operation;
 import oop5.cnc.view.View;
 
 public class Controller {
@@ -18,6 +16,7 @@ public class Controller {
         String op;
         OperationFactory operationFactory = new OperationFactory();
         ui.set(" <<<  Complex number calculator  >>> ");
+        ui.set("Value examples: 12; 6,67; 2-3i;  3,43-0,9i");
         while (true) {
             StringBuilder result = new StringBuilder();
             ui.set("Enter value:");
