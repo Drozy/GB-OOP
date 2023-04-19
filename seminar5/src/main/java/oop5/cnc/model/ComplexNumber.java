@@ -1,7 +1,9 @@
-package oop5.calculator.model;
+package oop5.cnc.model;
 
 import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.Objects;
+import java.util.StringTokenizer;
 
 public class ComplexNumber {
     private double re; //действительная часть числа
@@ -49,6 +51,50 @@ public class ComplexNumber {
     }
 
     /**
+     * Создает новый экземпляр ComplexNumber из строки
+     *
+     * @param str вводная строка
+     */
+    public ComplexNumber(String str) {
+        str = str.replaceAll(" ", "").replace("\n", "");
+        StringTokenizer st = new StringTokenizer(str, "+-", true);
+        String previousToken = "";
+        String currentToken, numb;
+        double re = 0, im = 0;
+        NumberFormat nf = NumberFormat.getInstance();
+        while (st.hasMoreTokens()) {
+            currentToken = st.nextToken();
+            if (previousToken.equals("-"))
+                numb = previousToken + currentToken;
+            else
+                numb = currentToken;
+            if (!numb.equals("+") && !numb.equals("-")) {
+                if (numb.indexOf('i') == -1) {
+                    try {
+                        re = nf.parse(numb).doubleValue();
+                    } catch (ParseException e) {
+                        throw new RuntimeException(e);
+                    }
+                } else {
+                    numb = numb.replace('i', ' ');
+                    if (numb.equals(" "))
+                        numb = "1";
+                    if (numb.equals("- "))
+                        numb = "-1";
+                    try {
+                        im = nf.parse(numb).doubleValue();
+                    } catch (ParseException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+            previousToken = currentToken;
+        }
+        this.re = re;
+        this.im = im;
+    }
+
+    /**
      * Возвращает действительную часть числа
      */
     public double getRe() {
@@ -68,9 +114,12 @@ public class ComplexNumber {
         String result;
         NumberFormat nf = NumberFormat.getInstance();
         if (re == 0)
-            result = nf.format(im) + "i";
+            result = (im == 1 ? "" : nf.format(im)) + "i";
         else
-            result = nf.format(re) + (im < 0 ? "-" : "+") + nf.format(Math.abs(im)) + "i";
+            result = nf.format(re) +
+                    (im < 0 ? "-" : "+") +
+                    (im == 1 ? "" : nf.format(Math.abs(im))) +
+                    "i";
         if (im == 0)
             result = nf.format(re);
         return result;
@@ -81,7 +130,8 @@ public class ComplexNumber {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ComplexNumber that = (ComplexNumber) o;
-        return Double.compare(that.re, re) == 0 && Double.compare(that.im, im) == 0;
+        return Double.compare(that.re, re) == 0 &&
+                Double.compare(that.im, im) == 0;
     }
 
     @Override

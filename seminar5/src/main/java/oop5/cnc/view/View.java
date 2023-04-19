@@ -1,4 +1,4 @@
-package oop5.calculator.view;
+package oop5.cnc.view;
 
 public interface View {
     String get();
