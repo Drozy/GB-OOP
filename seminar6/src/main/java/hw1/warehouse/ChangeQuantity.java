@@ -5,8 +5,19 @@ package hw1.warehouse;
  * Interface Segregation Principle
  */
 public interface ChangeQuantity {
-    public void receipt(Product product);
+    /**
+     * Приход товара
+     *
+     * @param product товар
+     */
+    void receipt(Product product);
 
-    public void consumption(Product product);
+    /**
+     * Расход товара
+     *
+     * @param product товар
+     * @return ложь, если на складе недостаточно товара
+     */
+    boolean consumption(Product product);
 
 }

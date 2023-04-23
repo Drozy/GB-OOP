@@ -1,6 +1,8 @@
 package hw1.warehouse;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,15 +12,17 @@ import java.util.List;
  * Interface Segregation Principle
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Warehouse implements ChangeQuantity, SearchProduct {
 
     private List<Product> store = new ArrayList<>();
 
-    public void addProduct(Product product) {
+    private void addProduct(Product product) {
         store.add(product);
     }
 
-    public void delProduct(Product product) {
+    private void delProduct(Product product) {
         store.remove(product);
     }
 
@@ -30,27 +34,46 @@ public class Warehouse implements ChangeQuantity, SearchProduct {
         } else {
             store.get(i).increaseQuantity(product.getQuantity());
         }
+        System.out.println("Оформлен приход товара: " + product);
     }
 
     @Override
-    public void consumption(Product product) {
-        int i = store.indexOf(product);
-        if (i == -1) {
-            System.out.println("Такого товара нет на складе.");
-        } else if (store.get(i).getQuantity() < product.getQuantity()) {
-            System.out.println("Недостаточно товара на складе");
-        } else {
-            store.get(i).decreaseQuantity(product.getQuantity());
+    public boolean consumption(Product product) {
+        boolean isOk = false;
+        for (Product p: store) {
+            if (p.getName().equalsIgnoreCase(product.getName())) {
+                if (p.getQuantity() < product.getQuantity()) {
+                    System.out.println("Недостаточно товара " + product.getName() + " на складе");
+                } else if (p.getQuantity() == product.getQuantity()) {
+                    delProduct(product);
+                    isOk = true;
+                    System.out.println("Отпущено: " + product + " Больше нет.");
+                } else {
+                    p.decreaseQuantity(product.getQuantity());
+                    isOk = true;
+                    System.out.println("Отпущено: " + product);
+                }
+            }
         }
+        return isOk;
     }
 
     @Override
-    public void searchProduct(Product product) {
-        int i = store.indexOf(product);
-        if (i == -1) {
-            System.out.println("Такого товара нет на складе.");
-        } else {
-            System.out.println(store.get(i));
+    public Product searchProduct(String productName) {
+        for (Product p : store) {
+            if (p.getName().equalsIgnoreCase(productName)) {
+                return p;
+            }
         }
+        return null;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (Product p: store) {
+            sb.append(p).append("\n");
+        }
+        return sb.toString();
     }
 }

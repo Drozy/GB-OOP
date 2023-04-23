@@ -5,5 +5,5 @@ package hw1.warehouse;
  * Interface Segregation Principle
  */
 public interface SearchProduct {
-    public void searchProduct(Product product);
+    Product searchProduct(String productName);
 }
